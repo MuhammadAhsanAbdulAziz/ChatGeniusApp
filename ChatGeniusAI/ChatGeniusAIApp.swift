@@ -12,6 +12,7 @@ struct ChatGeniusAIApp: App {
     var body: some Scene {
         WindowGroup {
             HomeScreen()
+                
         }
     }
 }
