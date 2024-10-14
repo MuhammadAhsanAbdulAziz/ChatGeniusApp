@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct ChatGeniusAIApp: App {
+    
+    var vm = CurrentScreenViewModel()
+    
     var body: some Scene {
         WindowGroup {
             HomeScreen()
+                .environmentObject(vm)
                 
         }
     }

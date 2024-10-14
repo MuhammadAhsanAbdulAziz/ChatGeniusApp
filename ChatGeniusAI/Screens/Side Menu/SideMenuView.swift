@@ -14,12 +14,12 @@ struct SideMenuView: View {
     @State var isOptionShowing = false
     @State var isFAQActive = false
     @State var isFAQShowing = false
+    @State var isSupportDialogShowing = false
     
     var body: some View {
         HStack {
             
             ZStack{
-                
                 
                 VStack(alignment: .leading, spacing: 0) {
                     ProfileImageView()
@@ -72,7 +72,9 @@ struct SideMenuView: View {
                                     .font(.system(size: 14, weight: .regular))
                                     .foregroundColor(.white)
                                     .onTapGesture {
-                                        isOptionShowing.toggle()
+                                        withAnimation {
+                                            isSupportDialogShowing.toggle()
+                                        }
                                     }
                                 Text("Share App on Appstore")
                                     .font(.system(size: 14, weight: .regular))
@@ -135,6 +137,11 @@ struct SideMenuView: View {
         
         .background(.clear)
         .navigationLinkHack(isActive: $isFAQActive)
+        .overlay {
+            if isSupportDialogShowing {
+                SupportDialog(isSupportDialogShowing: $isSupportDialogShowing)
+            }
+        }
     }
     
     func openAppStore() {

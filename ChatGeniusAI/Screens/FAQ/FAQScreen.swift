@@ -10,8 +10,8 @@ import SwiftUI
 struct FAQScreen: View {
     
     @Environment(\.dismiss) var dismiss
-    @State var emailTxt : String = ""
-    @State var queryTxt : String = ""
+    @EnvironmentObject var currentVM : CurrentScreenViewModel
+    @State var vm = FAQViewModel()
     let listOfQA: [[String]] = [
         ["What is Chat Genius AI?", "Chat Genius AI is an advanced artificial intelligence platform designed to assist users with a wide range of tasks, including creative writing, role-playing, idea generation, learning and tutoring, language translation, conversational interaction, programming support, professional assistance, lifestyle advice, and entertainment."],
         ["How do I access Chat Genius AI?", "You can access Chat Genius AI by downloading the app from the App Store or Google Play Store and creating an account. Once logged in, you can start interacting with the AI."],
@@ -91,40 +91,10 @@ struct FAQScreen: View {
                             .foregroundStyle(.white)
                             .font(.system(size: 13,weight: .medium))
                         
-                        TextField("", text: $emailTxt,
-                                  prompt:
-                                    Text("Email address")
-                            .font(.system(size: 15))
-                            .foregroundStyle(.white)
-                        )
-                        .keyboardType(.emailAddress)
-                        .padding(.vertical,15)
-                        .padding(.horizontal,15)
-                        .clipShape(RoundedRectangle(cornerRadius: 4))
-                        .foregroundStyle(.black)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 5)  // Apply rounded corners
-                                .stroke(.darkBrown, lineWidth: 2)  // White border with line width 2
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        CustomTextField(bindingText: $vm.emailTxt, text: "Email Address",areIconsShowing: false,radius: 5,borderColor: .darkBrown,bgColor: .black,textColor: .white,lineNumber: 1)
                         
                         HStack{
-                            TextField("", text: $queryTxt,
-                                      prompt:
-                                        Text("How can we help you?")
-                                .font(.system(size: 15))
-                                .foregroundStyle(.white)
-                            )
-                            .keyboardType(.emailAddress)
-                            .padding(.vertical,15)
-                            .padding(.horizontal,15)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                            .foregroundStyle(.black)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)  // Apply rounded corners
-                                    .stroke(.darkBrown, lineWidth: 2)  // White border with line width 2
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            CustomTextField(bindingText: $vm.queryTxt, text: "How can we help you?",areIconsShowing: false,radius: 5,borderColor: .darkBrown,bgColor: .black,textColor: .white,lineNumber: 1)
                             
                             Button {
                                 // Button action
@@ -165,10 +135,8 @@ struct FAQScreen: View {
                             .foregroundStyle(.white)
                             .font(.system(size: 23,weight: .bold))
                         
-                        ForEach(listOfQA, id: \.self) { qa in
-                            QuestionItem(question: qa[0], answer: qa[1])
-                        }
-          
+                        QuestionList(listOfQA: listOfQA)
+                        
                     }
                     .padding(.vertical,20)
                     .padding(.horizontal,35)
@@ -177,6 +145,9 @@ struct FAQScreen: View {
             }
             
             
+        }
+        .onAppear{
+            currentVM.currentScreen = "faq"
         }
         .navigationBarBackButtonHidden(true)
     }

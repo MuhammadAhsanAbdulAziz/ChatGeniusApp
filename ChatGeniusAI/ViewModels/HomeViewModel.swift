@@ -9,6 +9,6 @@ import Foundation
 
 @Observable class HomeViewModel {
     
-    var isLoginDialog : Bool = false
+    var isLoginDialog : Bool = true
     var msgText = ""
 }

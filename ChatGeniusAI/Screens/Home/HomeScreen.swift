@@ -11,8 +11,13 @@ struct HomeScreen: View {
     
     @State private var vm = HomeViewModel()
     @State private var keyboard = KeyboardResponder()
+    @EnvironmentObject var currentVM : CurrentScreenViewModel
     @State var presentSideMenu = false
     @State var selectedSideMenuTab = 0
+    @State var isLanguageShowing = false
+    private var languages : [[String]] = [["en","English","EN"],["france","Francias","FR"],["germany","Deutsch","GR"],["portugal","Protugues","PR"],["arabic","Arabic","AR"],["esponol","Espanol","ES"],["italy","Italiano","IT"]]
+    @State private var selectedLanguage: [String] = ["en", "English", "EN"] // Track the selected language
+    
     
     var body: some View {
         NavigationView{
@@ -21,28 +26,6 @@ struct HomeScreen: View {
                     .ignoresSafeArea()
                 
                 VStack{
-                    
-                    HStack{
-                        Image("menu")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width:20,height: 20)
-                            .onTapGesture {
-                                presentSideMenu = true
-                            }
-                        
-                        Spacer()
-                        
-                        
-                    }
-                    .padding(.horizontal,10)
-                    
-                    Spacer()
-                        .frame(height: 10)
-                    
-                    Divider()
-                        .frame(minHeight: 2)
-                        .background(.white)
                     
                     VStack(alignment:.center,spacing:30){
                         
@@ -64,25 +47,7 @@ struct HomeScreen: View {
                             .font(.system(size: 14,weight: .semibold))
                         
                         VStack(spacing:10){
-                            HStack{
-                                TextField("", text: $vm.msgText,
-                                          prompt:
-                                            Text("Send a message")
-                                    .foregroundStyle(.black))
-                                Image("voice")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 25,height: 25)
-                                Image("send")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 25,height: 25)
-                            }
-                            .padding(.vertical,15)
-                            .padding(.horizontal,15)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .foregroundStyle(.black)
+                            CustomTextField(bindingText: $vm.msgText, text: "Send a message", areIconsShowing: true, radius: 8, borderColor: .white,bgColor: .white,textColor: .black,lineNumber: 1)
                             
                             Text("ChatGenius AI may produce inaccurate information about people, places, or facts.")
                                 .foregroundStyle(.gray)
@@ -90,16 +55,12 @@ struct HomeScreen: View {
                                 .font(.system(size: 13))
                         }
                         
-    
+                        
                     }
                     .padding()
                     
                     
                     
-                }
-                .overlay(alignment: .topTrailing) {
-                    Text("Ahsna")
-                        .foregroundStyle(.white)
                 }
                 .opacity(vm.isLoginDialog ? 0.2 : 1)
                 .blur(radius: vm.isLoginDialog ? 1 : 0)
@@ -114,8 +75,89 @@ struct HomeScreen: View {
                 
                 
             }
+            .onAppear{
+                currentVM.currentScreen = "home"
+            }
+            
+            .toolbar {
+                if !vm.isLoginDialog{
+                    if !presentSideMenu{
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button(action: {
+                                presentSideMenu = true
+                            }) {
+                                Image("menu")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width:30,height: 30)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            .toolbarBackground(.app, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .animation(.easeOut(duration: 0.3), value: keyboard.currentHeight)
+            
+            
         }
+        .overlay(alignment: .topTrailing, content: {
+            if !vm.isLoginDialog{
+                if currentVM.currentScreen != "faq"{
+                    VStack(alignment:.leading){
+                        HStack{
+                            Spacer()
+                            
+                            LanguageItem(image: selectedLanguage[0], text: selectedLanguage[2], isFull: false)
+                                .onTapGesture {
+                                    withAnimation {
+                                        isLanguageShowing.toggle()
+                                    }
+                                }
+                            
+                            Image(systemName: isLanguageShowing ? "chevron.down" : "chevron.up")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 10,height: 10)
+                                .padding(.bottom,6)
+                                .padding(.trailing,10)
+                                .onTapGesture {
+                                    withAnimation {
+                                        isLanguageShowing.toggle()
+                                    }
+                                    
+                                }
+                        }
+                        .padding(isLanguageShowing ? .bottom : .top)
+                        
+                        ScrollView{
+                            HStack{
+                                VStack(alignment: .leading) {
+                                    let filteredLanguages = languages.filter { $0 != selectedLanguage }
+                                    LanguageList(languages: filteredLanguages, selectedLanguage: $selectedLanguage, isLanguageShowing: $isLanguageShowing)
+                                }
+                                Spacer()
+                            }
+                        }
+                        .defaultScrollAnchor(.top)
+                        .frame(maxWidth: .infinity)
+                        .padding(.leading,10)
+                        Spacer()
+                        
+                    }
+                    .frame(width: isLanguageShowing ? 150 : 100,height: isLanguageShowing ? 250 : 30)
+                    .background(.white)
+                    .padding(.horizontal,10)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                }
+            }
+            
+            
+        })
+        
+        
+        
         
     }
 }
