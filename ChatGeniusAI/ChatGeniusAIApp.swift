@@ -6,9 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseCore
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        
+        return true
+    }
+}
 
 @main
 struct ChatGeniusAIApp: App {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var vm = CurrentScreenViewModel()
     
@@ -16,7 +28,7 @@ struct ChatGeniusAIApp: App {
         WindowGroup {
             HomeScreen()
                 .environmentObject(vm)
-                
+            
         }
     }
 }
