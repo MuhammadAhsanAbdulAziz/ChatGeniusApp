@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180454022CC13A4A0042472C /* OpenAISwift in Frameworks */ = {isa = PBXBuildFile; productRef = 180454012CC13A4A0042472C /* OpenAISwift */; };
+		1867C9AC2CBFA45200C16F42 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1867C9AB2CBFA45200C16F42 /* FirebaseAuth */; };
+		1867C9AE2CBFA45200C16F42 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1867C9AD2CBFA45200C16F42 /* FirebaseDatabase */; };
+		1867C9B02CBFA45200C16F42 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 1867C9AF2CBFA45200C16F42 /* FirebaseFirestore */; };
 		188548DC2CBE9D23008095D8 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 188548DB2CBE9D23008095D8 /* FirebaseCore */; };
 /* End PBXBuildFile section */
 
@@ -14,9 +18,22 @@
 		181441B22CB0207000BC11CF /* ChatGeniusAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatGeniusAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		180454082CC143350042472C /* Exceptions for "ChatGeniusAI" folder in "ChatGeniusAI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 181441B12CB0207000BC11CF /* ChatGeniusAI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		181441B42CB0207000BC11CF /* ChatGeniusAI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				180454082CC143350042472C /* Exceptions for "ChatGeniusAI" folder in "ChatGeniusAI" target */,
+			);
 			path = ChatGeniusAI;
 			sourceTree = "<group>";
 		};
@@ -27,7 +44,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1867C9AE2CBFA45200C16F42 /* FirebaseDatabase in Frameworks */,
+				180454022CC13A4A0042472C /* OpenAISwift in Frameworks */,
+				1867C9B02CBFA45200C16F42 /* FirebaseFirestore in Frameworks */,
 				188548DC2CBE9D23008095D8 /* FirebaseCore in Frameworks */,
+				1867C9AC2CBFA45200C16F42 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +124,10 @@
 			name = ChatGeniusAI;
 			packageProductDependencies = (
 				188548DB2CBE9D23008095D8 /* FirebaseCore */,
+				1867C9AB2CBFA45200C16F42 /* FirebaseAuth */,
+				1867C9AD2CBFA45200C16F42 /* FirebaseDatabase */,
+				1867C9AF2CBFA45200C16F42 /* FirebaseFirestore */,
+				180454012CC13A4A0042472C /* OpenAISwift */,
 			);
 			productName = ChatGeniusAI;
 			productReference = 181441B22CB0207000BC11CF /* ChatGeniusAI.app */;
@@ -134,6 +159,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				188548A92CBE9B2E008095D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				180454002CC13A4A0042472C /* XCRemoteSwiftPackageReference "OpenAISwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 181441B32CB0207000BC11CF /* Products */;
@@ -393,6 +419,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ChatGeniusAI/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -434,6 +461,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ChatGeniusAI/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -485,6 +513,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		180454002CC13A4A0042472C /* XCRemoteSwiftPackageReference "OpenAISwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamrushy/OpenAISwift?source=post_page-----3d36a2661192--------------------------------";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
 		188548A92CBE9B2E008095D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -496,6 +532,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		180454012CC13A4A0042472C /* OpenAISwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 180454002CC13A4A0042472C /* XCRemoteSwiftPackageReference "OpenAISwift" */;
+			productName = OpenAISwift;
+		};
+		1867C9AB2CBFA45200C16F42 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 188548A92CBE9B2E008095D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		1867C9AD2CBFA45200C16F42 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 188548A92CBE9B2E008095D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		1867C9AF2CBFA45200C16F42 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 188548A92CBE9B2E008095D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
 		188548AA2CBE9BB8008095D8 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 188548A92CBE9B2E008095D8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

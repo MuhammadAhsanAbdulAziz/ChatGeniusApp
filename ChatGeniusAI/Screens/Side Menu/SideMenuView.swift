@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct SideMenuView: View {
     
@@ -15,6 +16,8 @@ struct SideMenuView: View {
     @State var isFAQActive = false
     @State var isFAQShowing = false
     @State var isSupportDialogShowing = false
+    @Binding var isLoginDialogBinding : Bool
+    
     
     var body: some View {
         HStack {
@@ -112,6 +115,14 @@ struct SideMenuView: View {
                         RowView(isSelected: selectedSideMenuTab == row.rawValue, imageName: row.iconName, title: row.title) {
                             selectedSideMenuTab = row.rawValue
                             presentSideMenu.toggle()
+                            if row.title == "Log out"{
+                                do {
+                                    try Auth.auth().signOut()
+                                    isLoginDialogBinding = true
+                                } catch{
+                                    
+                                }
+                            }
                         }
                     }
                     
@@ -145,11 +156,11 @@ struct SideMenuView: View {
     }
     
     func openAppStore() {
-            let appID = "<APP_ID>" // Replace with your app's App Store ID
-            if let url = URL(string: "https://apps.apple.com/app/id\(appID)") {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
+        let appID = "<APP_ID>" // Replace with your app's App Store ID
+        if let url = URL(string: "https://apps.apple.com/app/id\(appID)") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
+    }
     
     func ProfileImageView() -> some View{
         VStack(alignment: .center){

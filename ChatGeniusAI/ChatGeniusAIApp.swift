@@ -23,12 +23,13 @@ struct ChatGeniusAIApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var vm = CurrentScreenViewModel()
+    @StateObject var chatViewModel = ChatViewModel()
     
     var body: some Scene {
         WindowGroup {
-            HomeScreen()
-                .environmentObject(vm)
-            
+//            HomeScreen()
+//                .environmentObject(vm)
+            ContentView(viewModel: chatViewModel)
         }
     }
 }

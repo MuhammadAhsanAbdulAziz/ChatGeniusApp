@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
-struct LoginDialog: View {
+struct AuthDialog: View {
     
     @Binding var isloginDialog : Bool
-    @State var vm = LoginViewModel()
+    @State var vm = AuthViewModel()
     
     var body: some View {
         ZStack{
@@ -35,32 +36,43 @@ struct LoginDialog: View {
                     .multilineTextAlignment(.center)
                     .font(.system(size: 34,weight: .bold))
                 
-                
-                HStack{
-                    TextField("", text: $vm.emailText,
-                              prompt:
-                                Text("Email address")
-                        .font(.system(size: 18))
-                        .foregroundStyle(.gray)
-                    )
-                    .keyboardType(.emailAddress)
-                }
-                .padding(.vertical,15)
-                .padding(.horizontal,15)
-                .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 4))
-                .foregroundStyle(.black)
+                AuthTextField(placeHolderText: "Email Address",keyboardType: .emailAddress,fieldModel: $vm.emailText,isPasswordFieldType: false)
+                    .onSubmit {
+                        vm.emailText.onSubmitError()
+                    }
                 
                 Spacer()
                     .frame(height: 10)
+                if vm.isPasswordShowing {
+                    AuthTextField(placeHolderText: "Password",keyboardType: .default,fieldModel: $vm.passwordText,isPasswordFieldType: true)
+                        .onSubmit {
+                            vm.passwordText.onSubmitError()
+                        }
+                    
+                    Spacer()
+                        .frame(height: 10)
+                }
                 
                 Button{
-                    isloginDialog = false
+                    if vm.emailText.onValidate() {
+                        if vm.isPasswordShowing {
+                            if vm.passwordText.onValidate() {
+                                vm.isLogin ? vm.login() : vm.signUp()
+                            }
+                        } else {
+                            vm.isPasswordShowing = true
+                        }
+                    }
                 } label:{
-                    Text("Continue")
-                        .foregroundStyle(.white)
-                        .multilineTextAlignment(.center)
-                        .font(.system(size: 20,weight: .semibold))
+                    if vm.isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    } else {
+                        Text("Continue")
+                            .foregroundStyle(.white)
+                            .multilineTextAlignment(.center)
+                            .font(.system(size: 20, weight: .semibold))
+                    }
                 }
                 .frame(maxWidth: .infinity,minHeight: 55)
                 .background(.darkBrown)
@@ -81,14 +93,25 @@ struct LoginDialog: View {
                 }
                 .onTapGesture {
                     vm.isLogin = !vm.isLogin
+                    vm.emailText.value = ""
+                    vm.passwordText.value = ""
                 }
                 
             }
+            
             .padding()
             
             
         }
-        .frame(height: 450)
+        .onChange(of: vm.isAuthenticated, {
+            if vm.isAuthenticated {
+                isloginDialog = false
+            }
+        })
+        .alert(item: $vm.alertItem) { alert in
+            Alert(title: alert.title,message: alert.message,dismissButton: alert.dismissButton)
+        }
+        .frame(height: 500)
         .background(.lightBlack)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding()

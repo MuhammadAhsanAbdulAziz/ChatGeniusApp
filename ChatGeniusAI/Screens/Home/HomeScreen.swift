@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct HomeScreen: View {
     
@@ -62,25 +63,56 @@ struct HomeScreen: View {
                     
                     
                 }
-                .opacity(vm.isLoginDialog ? 0.2 : 1)
-                .blur(radius: vm.isLoginDialog ? 1 : 0)
-                .disabled(vm.isLoginDialog)
+                .opacity(vm.isLoginDialog || vm.isEmailDialog ? 0.2 : 1)
+                .blur(radius: vm.isLoginDialog || vm.isEmailDialog ? 1 : 0)
+                .disabled(vm.isLoginDialog || vm.isEmailDialog)
                 .padding(.bottom, keyboard.currentHeight / 2)
                 
                 if vm.isLoginDialog{
-                    LoginDialog(isloginDialog: $vm.isLoginDialog)
+                    AuthDialog(isloginDialog: $vm.isLoginDialog)
                 }
                 
-                SideMenu(isShowing: $presentSideMenu, content: AnyView(SideMenuView(selectedSideMenuTab: $selectedSideMenuTab, presentSideMenu: $presentSideMenu)))
+                if vm.isEmailDialog{
+                    EmailVerificationDialog()
+                }
                 
+                SideMenu(isShowing: $presentSideMenu, content: AnyView(SideMenuView(selectedSideMenuTab: $selectedSideMenuTab, presentSideMenu: $presentSideMenu,isLoginDialogBinding: $vm.isLoginDialog)))
                 
             }
+            .onChange(of: Auth.auth().currentUser, perform : { user in
+                if user != nil {
+                    if !(user?.isEmailVerified ?? false){
+                        print("no")
+                        print(vm.user?.isEmailVerified)
+                        
+                        vm.isEmailDialog = true
+                    }
+                    else{
+                        print("yes")
+                        print(vm.user?.isEmailVerified)
+                        vm.isEmailDialog = false
+                    }
+                }
+            })
             .onAppear{
+                
                 currentVM.currentScreen = "home"
+                if vm.user != nil {
+                    vm.isLoginDialog = false
+                }
+                vm.checkAndReloadUser { isVerified in
+                    if isVerified {
+                        vm.isEmailDialog = false
+                    } else {
+                        if !vm.isLoginDialog {
+                            vm.isEmailDialog = true
+                        }
+                    }
+                }
+                
             }
-            
             .toolbar {
-                if !vm.isLoginDialog{
+                if !vm.isLoginDialog && !vm.isEmailDialog{
                     if !presentSideMenu{
                         ToolbarItem(placement: .topBarLeading) {
                             Button(action: {
@@ -103,7 +135,7 @@ struct HomeScreen: View {
             
         }
         .overlay(alignment: .topTrailing, content: {
-            if !vm.isLoginDialog{
+            if !vm.isLoginDialog && !vm.isEmailDialog{
                 if currentVM.currentScreen != "faq"{
                     VStack(alignment:.leading){
                         HStack{
@@ -163,5 +195,7 @@ struct HomeScreen: View {
 }
 
 #Preview {
+    var vm = CurrentScreenViewModel()
     HomeScreen()
+        .environmentObject(vm)
 }
